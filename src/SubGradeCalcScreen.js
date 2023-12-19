@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 
 
 const SubGradeCalcScreen = () => {
@@ -17,11 +17,43 @@ const SubGradeCalcScreen = () => {
     setCards(updatedCards);
   };
 
+  const renderScore = () => {
+    
+  };
+
   const renderCards = () => {
     return cards.map((card) => (
       <View key={card.id} style={styles.card}>
-        <TouchableOpacity onPress={() => removeCard(card.id)} style={styles.removeCard} />
-        <TextInput style={styles.percentInput}/>
+        <View style={styles.cardHeader}>
+          <TextInput placeholder="grade component name" style={styles.titleInput}/>
+          <TextInput placeholder="percentage" style={styles.percentageInput}/>
+          <TouchableOpacity onPress={() => removeCard(card.id)} style={styles.removeCard}/>
+        </View>
+        <View style={styles.cardBody}>
+
+          <View style={styles.scoreControl}>
+              <TouchableOpacity onPress={addScore} style={styles.addScore}/>
+              <TouchableOpacity onPress={removeScore} style={styles.removeScore}/>
+          </View>
+
+          <View style={styles.scoreContainer}>
+            <View style={styles.signifierContainer}>
+              <Text style={styles.signifierText}>Score</Text>
+              <TextInput style={styles.scoreInput}/>
+            </View>
+            
+            <View style={styles.signifierContainer}>
+              <Text style={styles.signifierText}></Text>
+              <Text style={styles.seperator}>/</Text>
+            </View>
+           
+            <View style={styles.signifierContainer}>
+              <Text style={styles.signifierText}>Max Score</Text>
+              <TextInput style={styles.scoreInput}/>
+            </View>
+            
+          </View>
+        </View>
       </View>
     ));
   };
@@ -38,33 +70,102 @@ const SubGradeCalcScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 5,
     flex: 1,
+    backgroundColor: 'black',
+    padding: 10,
+  },
+  card: {
+    marginVertical: 10,
+    backgroundColor: '#2c3e50',
+    borderRadius: 10,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  titleInput: {
+    flex: 1,
+    height: 40,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    marginRight: 10,
+    paddingLeft: 10,
+    margin: 15,
+  },
+  percentageInput: {
+    width: 100,
+    height: 40,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    paddingLeft: 10,
+    margin: 15
+  },
+  removeCard: {
+    width: 30,
+    height: 30,
+    backgroundColor: 'red',
+    borderRadius: 5,
+  },
+  addCard: {
+    alignSelf: 'center',
+    marginVertical: 10,
+    width: 50,
+    height: 50,
+    backgroundColor: 'green',
+    borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  card: {
+  cardBody: {
+    flexDirection: "row"
+  },
+  scoreContainer: {
+    flex: 2,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  scoreInput: {
+    flex: 1,
+    height: 40,
+    width: 60,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    textAlign: 'center',
+  },
+  seperator: {
+    color: 'white',
+    fontSize: 30,
+    marginHorizontal: 5,
+    marginHorizontal: 10,
+  },
+  signifierText: {
+    color: 'white',
+    marginVertical: 5,
+    textAlign: "center",
+    fontSize: 12
+  },
+  scoreControl: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  addScore: {
+    backgroundColor: "yellow",
+    height: 30,
+    width: 30,
     margin: 10,
-    height: 200,
-    width: 350,
-    backgroundColor: "brown",
     borderRadius: 10,
   },
-  addCard: {
-    height: 50,
-    width: 50,
-    backgroundColor: "yellow"
-  },
-  removeCard: {
-    height: 50,
-    width: 50,
-    backgroundColor: "orange"
-  }, 
-  TitleInput: {
-    height: 40,
-    width: 80, 
-    backgroundColor: 'white', 
-    paddingHorizontal: 10, 
+  removeScore: {
+    backgroundColor: "orange",
+    height: 30,
+    width: 30,
+    margin: 10,
+    borderRadius: 10,
   }
 });
 
