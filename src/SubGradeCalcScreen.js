@@ -6,6 +6,17 @@ const SubGradeCalcScreen = () => {
   const [cards, setCards] = useState([]);
   const [cardCounter, setcardCounter] = useState(1);
 
+  const calculate = () => {
+    for (const card of cards) {
+      console.log(`Card ID: ${card.id}`);
+      console.log('Scores:');
+      for (const score of card.scores) {
+        console.log(score);
+      }
+      console.log('---');
+    }
+  };
+
   const addCard = () => {
     const newCard = { id: cardCounter, scores: [] };
     setCards([...cards, newCard]);
@@ -21,6 +32,15 @@ const SubGradeCalcScreen = () => {
     const updatedCards = cards.map((card) =>
       card.id === cardId
         ? { ...card, scores: [...card.scores, { id: card.scores.length + 1 }] }
+        : card
+    );
+    setCards(updatedCards);
+  };
+  
+  const removeScore = (cardId) => {
+    const updatedCards = cards.map((card) =>
+      card.id === cardId
+        ? { ...card, scores: card.scores.slice(0, -1) } 
         : card
     );
     setCards(updatedCards);
@@ -60,7 +80,7 @@ const SubGradeCalcScreen = () => {
 
           <View style={styles.scoreControl}>
               <TouchableOpacity onPress={() => addScore(card.id)} style={styles.addScore} />
-              <TouchableOpacity style={styles.removeScore}/>
+              <TouchableOpacity onPress={() => removeScore(card.id)} style={styles.removeScore}/>
           </View>
 
             <View style={{flexDirection: "column"}}>
@@ -75,6 +95,7 @@ const SubGradeCalcScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity style={styles.addCard} onPress={addCard} />
+      <TouchableOpacity style={styles.calculate} onPress={calculate}/>
       <ScrollView>
         <SafeAreaView>{renderCards()}</SafeAreaView>
       </ScrollView>
@@ -170,17 +191,27 @@ const styles = StyleSheet.create({
   },
   addScore: {
     backgroundColor: "yellow",
-    height: 30,
-    width: 30,
+    height: 40,
+    width: 40,
     margin: 10,
     borderRadius: 10,
   },
   removeScore: {
     backgroundColor: "orange",
-    height: 30,
-    width: 30,
+    height: 40,
+    width: 40,
     margin: 10,
     borderRadius: 10,
+  },
+  calculate: {
+    alignSelf: 'center',
+    marginVertical: 10,
+    width: 50,
+    height: 50,
+    backgroundColor: 'green',
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });
 
