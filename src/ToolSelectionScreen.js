@@ -22,7 +22,7 @@ const ToolSelectionScreen = () => {
                 <Text style={styles.buttonText}>Subject Grade Calculator</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleToolButtonPress(2)} style={styles.button}>
-            <Text style={styles.buttonText}>Dummy</Text>
+                <Text style={styles.buttonText}>Dummy</Text>
             </TouchableOpacity>
         </SafeAreaView>
     );
