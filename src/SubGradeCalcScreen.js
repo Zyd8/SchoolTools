@@ -7,7 +7,7 @@ const SubGradeCalcScreen = () => {
   const [cardCounter, setcardCounter] = useState(1);
 
   const addCard = () => {
-    const newCard = { id: cardCounter };
+    const newCard = { id: cardCounter, scores: [] };
     setCards([...cards, newCard]);
     setcardCounter(cardCounter + 1);
   };
@@ -17,8 +17,35 @@ const SubGradeCalcScreen = () => {
     setCards(updatedCards);
   };
 
-  const renderScore = () => {
-    
+  const addScore = (cardId) => {
+    const updatedCards = cards.map((card) =>
+      card.id === cardId
+        ? { ...card, scores: [...card.scores, { id: card.scores.length + 1 }] }
+        : card
+    );
+    setCards(updatedCards);
+  };
+
+  const renderScore = (cardId) => {
+    const card = cards.find((c) => c.id === cardId);
+    return card?.scores.map((score) => (
+      <View key={score.id} style={styles.scoreContainer}>
+        <View style={styles.signifierContainer}>
+          <Text style={styles.signifierText}>Score</Text>
+          <TextInput style={styles.scoreInput}/>
+        </View>
+        
+        <View style={styles.signifierContainer}>
+          <Text style={styles.signifierText}></Text>
+          <Text style={styles.seperator}>/</Text>
+        </View>
+        
+        <View style={styles.signifierContainer}>
+          <Text style={styles.signifierText}>Max Score</Text>
+          <TextInput style={styles.scoreInput}/>
+        </View>
+      </View>
+    ));
   };
 
   const renderCards = () => {
@@ -32,28 +59,15 @@ const SubGradeCalcScreen = () => {
         <View style={styles.cardBody}>
 
           <View style={styles.scoreControl}>
-              <TouchableOpacity onPress={addScore} style={styles.addScore}/>
-              <TouchableOpacity onPress={removeScore} style={styles.removeScore}/>
+              <TouchableOpacity onPress={() => addScore(card.id)} style={styles.addScore} />
+              <TouchableOpacity style={styles.removeScore}/>
           </View>
 
-          <View style={styles.scoreContainer}>
-            <View style={styles.signifierContainer}>
-              <Text style={styles.signifierText}>Score</Text>
-              <TextInput style={styles.scoreInput}/>
-            </View>
-            
-            <View style={styles.signifierContainer}>
-              <Text style={styles.signifierText}></Text>
-              <Text style={styles.seperator}>/</Text>
-            </View>
-           
-            <View style={styles.signifierContainer}>
-              <Text style={styles.signifierText}>Max Score</Text>
-              <TextInput style={styles.scoreInput}/>
+            <View style={{flexDirection: "column"}}>
+              {renderScore(card.id)}
             </View>
             
           </View>
-        </View>
       </View>
     ));
   };
@@ -126,6 +140,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
+    marginRight: 15
   },
   scoreInput: {
     flex: 1,
