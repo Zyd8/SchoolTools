@@ -1,36 +1,40 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 
+
 const SubGradeCalcScreen = () => {
-    const [cards, setCards] = useState([]);
-  
-    const addCard = () => {
-      setCards([...cards, {}]); 
-    };
-  
-    const removeCard = (index) => {
-      const updatedCards = [...cards];
-      updatedCards.splice(index, 1); 
-      setCards(updatedCards);
-    };
-  
-    const renderCards = () => {
-      return cards.map((_, index) => (
-        <View key={index} style={styles.card}>
-          <TouchableOpacity onPress={() => removeCard(index)} style={styles.removeCard} />
-        </View>
-      ));
-    };
-  
-    return (
-      <SafeAreaView style={styles.container}>
-        <TouchableOpacity style={styles.addCard} onPress={addCard} />
-        <ScrollView>
-          <SafeAreaView>{renderCards()}</SafeAreaView>
-        </ScrollView>
-      </SafeAreaView>
-    );
+  const [cards, setCards] = useState([]);
+  const [cardCounter, setcardCounter] = useState(1);
+
+  const addCard = () => {
+    const newCard = { id: cardCounter };
+    setCards([...cards, newCard]);
+    setcardCounter(cardCounter + 1);
   };
+
+  const removeCard = (id) => {
+    const updatedCards = cards.filter((card) => card.id !== id);
+    setCards(updatedCards);
+  };
+
+  const renderCards = () => {
+    return cards.map((card) => (
+      <View key={card.id} style={styles.card}>
+        <TouchableOpacity onPress={() => removeCard(card.id)} style={styles.removeCard} />
+        <TextInput style={styles.percentInput}/>
+      </View>
+    ));
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <TouchableOpacity style={styles.addCard} onPress={addCard} />
+      <ScrollView>
+        <SafeAreaView>{renderCards()}</SafeAreaView>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -55,6 +59,12 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     backgroundColor: "orange"
+  }, 
+  TitleInput: {
+    height: 40,
+    width: 80, 
+    backgroundColor: 'white', 
+    paddingHorizontal: 10, 
   }
 });
 
