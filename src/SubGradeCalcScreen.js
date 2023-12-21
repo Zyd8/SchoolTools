@@ -7,6 +7,8 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  Modal,
+  TouchableWithoutFeedback,
 } from "react-native";
 
 const SubGradeCalcScreen = () => {
@@ -21,12 +23,53 @@ const SubGradeCalcScreen = () => {
 
   const [cardCounter, setCardCounter] = useState(2);
   const [scoreCounter, setScoreCounter] = useState(2);
-  const [outputValue, setOutputValue] = useState('');
+  const [outputGrade, setOutputGrade] = useState('');
+  const [isOutputVisible, setisOutputVisible] = useState(false);
+
+  const getGradeEquivalent = () => {
+    let equivalentGrade;
+    if (outputGrade >= 98 && outputGrade <= 100) {
+      equivalentGrade = "1.00";
+    }
+    else if (outputGrade >= 95 && outputGrade <= 97) {
+      equivalentGrade = "1.25";
+    }
+    else if (outputGrade >= 92 && outputGrade <= 94) {
+      equivalentGrade = "1.50";
+    }
+    else if (outputGrade >= 89 && outputGrade <= 91) {
+      equivalentGrade = "1.75";
+    }
+    else if (outputGrade >= 86 && outputGrade <= 88) {
+      equivalentGrade = "2.00";
+    }
+    else if (outputGrade >= 83 && outputGrade <= 85) {
+      equivalentGrade = "2.25";
+    }
+    else if (outputGrade >= 80 && outputGrade <= 82) {
+      equivalentGrade = "2.50";
+    }
+    else if (outputGrade >= 77 && outputGrade <= 79) {
+      equivalentGrade = "2.75";
+    }
+    else if (outputGrade >= 75 && outputGrade <= 76) {
+      equivalentGrade = "3.00";
+    }
+    else {
+      equivalentGrade = "4.00 or 5.00"
+    }
+    return equivalentGrade;
+  }
+  
+
+  const toggleOutputModal = () => {
+    setisOutputVisible(!isOutputVisible);
+  }
 
   const calculate = () => {
     let totalScore = 0;
     let totalMaxScore = 0;
-    const outputValuePerCard = [];
+    const outputGradePerCard = [];
   
     for (const card of cards) {
       const parsedPercentage = parseFloat(card.percentage);
@@ -56,15 +99,16 @@ const SubGradeCalcScreen = () => {
       }
   
       let result = ((totalScore / totalMaxScore) * 50 + 50) * (parsedPercentage / 100);
-      outputValuePerCard.push(result);
+      outputGradePerCard.push(result);
     }
   
     let finalResult = 0;
-    for (const value of outputValuePerCard) {
+    for (const value of outputGradePerCard) {
       finalResult += value;
     }
   
-    setOutputValue(finalResult);
+    setOutputGrade(finalResult);
+    toggleOutputModal();
   };
   
   const addCard = () => {
@@ -221,12 +265,32 @@ const SubGradeCalcScreen = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.cardControl}>
         <TouchableOpacity style={styles.addCard} onPress={addCard} />
-        <Text style={styles.outputValueText}>{outputValue}</Text>
+        <Text style={styles.outputGradeText}>{outputGrade}</Text>
         <TouchableOpacity style={styles.calculateButton} onPress={calculate} />
       </View>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <SafeAreaView>{renderCards()}</SafeAreaView>
       </ScrollView>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={isOutputVisible}
+        onRequestClose={toggleOutputModal}
+      >
+        <TouchableWithoutFeedback onPress={toggleOutputModal}>
+          <View style={styles.modalContainer}>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContent}>
+                <Text>Calculated Grade: </Text>
+                <Text>{outputGrade}</Text>
+
+                <Text>Equivalent Grade: </Text>
+                <Text>{getGradeEquivalent()}</Text>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -343,21 +407,33 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  outputValueText: {
+  outputGradeText: {
     marginVertical: 10,
-    fontSize: 30,
     backgroundColor: "white",
     height: 40,
     width: 160,
     borderRadius: 10,
     textAlign: "center",
-    alignItems: "center"
+    alignItems: "center",
+    textAlignVertical: "center"
   },
   cardControl: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center"
-  }
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+  },
 });
 
 export default SubGradeCalcScreen;
