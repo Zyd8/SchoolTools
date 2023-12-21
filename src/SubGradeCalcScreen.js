@@ -21,35 +21,52 @@ const SubGradeCalcScreen = () => {
 
   const [cardCounter, setCardCounter] = useState(2);
   const [scoreCounter, setScoreCounter] = useState(2);
-  const [outputValue, setOutputValue] = useState(0);
+  const [outputValue, setOutputValue] = useState('');
 
   const calculate = () => {
     let totalScore = 0;
     let totalMaxScore = 0;
     const outputValuePerCard = [];
-
+  
     for (const card of cards) {
+      const parsedPercentage = parseFloat(card.percentage);
+  
+      if (isNaN(parsedPercentage)) {
+        throw new Error('Invalid percentages: must be numeric');
+      }
+  
       totalScore = 0;
       totalMaxScore = 0;
+  
       for (const score of card.scores) {
-        totalScore += parseFloat(score.score);
-        totalMaxScore += parseFloat(score.maxScore);
-      }
+        const parsedScore = parseFloat(score.score);
+        const parsedMaxScore = parseFloat(score.maxScore);
+  
 
-      let result = totalScore / totalMaxScore;
-      result = result * 50 + 50;
-      result = result * (parseFloat(card.percentage) / 100);
+        if (isNaN(parsedScore)) {
+          throw new Error('Invalid Scores: must be numeric');
+        }
+
+        if (isNaN(parsedMaxScore)) {
+          throw new Error('Invalid Max Scores: must be numeric');
+        }
+  
+        totalScore += parsedScore;
+        totalMaxScore += parsedMaxScore;
+      }
+  
+      let result = ((totalScore / totalMaxScore) * 50 + 50) * (parsedPercentage / 100);
       outputValuePerCard.push(result);
     }
-
+  
     let finalResult = 0;
     for (const value of outputValuePerCard) {
       finalResult += value;
     }
-
+  
     setOutputValue(finalResult);
   };
-
+  
   const addCard = () => {
     const newCard = {
       id: cardCounter,
@@ -123,9 +140,11 @@ const SubGradeCalcScreen = () => {
           <TextInput
             style={styles.scoreInput}
             value={score.score}
-            onChangeText={(text) =>
-              updateScore(cardId, score.id, "score", text)
-            }
+            onChangeText={(text) => {
+              const numericValue = text.replace(/[^0-9]/g, '');
+              updateScore(cardId, score.id, "score", numericValue);
+            }}
+            keyboardType="numeric"
           />
         </View>
 
@@ -139,9 +158,11 @@ const SubGradeCalcScreen = () => {
           <TextInput
             style={styles.scoreInput}
             value={score.maxScore}
-            onChangeText={(text) =>
-              updateScore(cardId, score.id, "maxScore", text)
-            }
+            onChangeText={(text) => {
+              const numericValue = text.replace(/[^0-9]/g, '');
+              updateScore(cardId, score.id, "maxScore", numericValue);
+            }}
+            keyboardType="numeric"
           />
         </View>
         <View style={styles.signifierText}>
@@ -170,7 +191,11 @@ const SubGradeCalcScreen = () => {
             placeholder="percentage"
             style={styles.percentageInput}
             value={card.percentage}
-            onChangeText={(text) => updateCardInfo(card.id, "percentage", text)}
+            onChangeText={(text) => {
+              const numericValue = text.replace(/[^0-9]/g, '');
+              updateCardInfo(card.id, "percentage", numericValue);
+            }}
+            keyboardType="numeric"
           />
           <TouchableOpacity
             onPress={() => removeCard(card.id)}
@@ -321,11 +346,17 @@ const styles = StyleSheet.create({
   outputValueText: {
     marginVertical: 10,
     fontSize: 30,
-    color: "white",
+    backgroundColor: "white",
+    height: 40,
+    width: 160,
+    borderRadius: 10,
+    textAlign: "center",
+    alignItems: "center"
   },
   cardControl: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center"
   }
 });
 
