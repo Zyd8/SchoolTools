@@ -1,22 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import SubGradeCalcScreen from "./src/SubGradeCalcScreen";
-import ToolSelectionScreen from './src/ToolSelectionScreen';
+import ToolSelectionScreen from "./src/ToolSelectionScreen";
 
 export default function App() {
   const Stack = createStackNavigator();
 
   return (
     <NavigationContainer>
-
-    <Stack.Navigator initialRouteName="ToolSelectionScreen">
-      <Stack.Screen name="ToolSelectionScreen" component={ToolSelectionScreen}/>
-      <Stack.Screen name="SubGradeCalcScreen" component={SubGradeCalcScreen}/>
-    </Stack.Navigator>
-
+      <Stack.Navigator initialRouteName="ToolSelectionScreen">
+        <Stack.Screen
+          name="ToolSelectionScreen"
+          component={ToolSelectionScreen}
+        />
+        <Stack.Screen
+          name="SubGradeCalcScreen"
+          component={SubGradeCalcScreen}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
