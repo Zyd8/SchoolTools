@@ -13,7 +13,7 @@ const ToolSelectionScreen = () => {
   const handleToolButtonPress = (id) => {
     switch (id) {
       case 1:
-        navigation.navigate("SubGradeCalcScreen");
+        navigation.navigate("Subject Grade Calculator");
         break;
       default:
         console.log("Nothing selected");

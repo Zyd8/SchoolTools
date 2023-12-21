@@ -194,9 +194,11 @@ const SubGradeCalcScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.outputValueText}>{outputValue}</Text>
-      <TouchableOpacity style={styles.addCard} onPress={addCard} />
-      <TouchableOpacity style={styles.calculate} onPress={calculate} />
+      <View style={styles.cardControl}>
+        <TouchableOpacity style={styles.addCard} onPress={addCard} />
+        <Text style={styles.outputValueText}>{outputValue}</Text>
+        <TouchableOpacity style={styles.calculateButton} onPress={calculate} />
+      </View>
       <ScrollView>
         <SafeAreaView>{renderCards()}</SafeAreaView>
       </ScrollView>
@@ -246,10 +248,10 @@ const styles = StyleSheet.create({
   addCard: {
     alignSelf: "center",
     marginVertical: 10,
-    width: 50,
+    width: 80,
     height: 50,
     backgroundColor: "green",
-    borderRadius: 25,
+    borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -306,20 +308,25 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 20,
   },
-  calculate: {
+  calculateButton: {
     alignSelf: "center",
     marginVertical: 10,
     width: 50,
     height: 50,
     backgroundColor: "green",
-    borderRadius: 25,
+    borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
   },
   outputValueText: {
+    marginVertical: 10,
     fontSize: 30,
     color: "white",
   },
+  cardControl: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  }
 });
 
 export default SubGradeCalcScreen;

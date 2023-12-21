@@ -4,32 +4,24 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import SubGradeCalcScreen from "./src/SubGradeCalcScreen";
-import ToolSelectionScreen from "./src/ToolSelectionScreen";
+import SelectGradeCalcScreen from "./src/SelectGradeCalcScreen";
 
 export default function App() {
   const Stack = createStackNavigator();
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="ToolSelectionScreen">
+      <Stack.Navigator initialRouteName="Subject Grade Calculator">
         <Stack.Screen
+          // For expanding purposes
           name="ToolSelectionScreen"
-          component={ToolSelectionScreen}
+          component={SelectGradeCalcScreen}
         />
         <Stack.Screen
-          name="SubGradeCalcScreen"
+          name="Subject Grade Calculator"
           component={SubGradeCalcScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
