@@ -70,12 +70,21 @@ const SubGradeCalcScreen = () => {
     let totalScore = 0;
     let totalMaxScore = 0;
     const outputGradePerCard = [];
+
+    let totalPercentage = 0;
+    for (const card of cards) {
+      totalPercentage += parseFloat(card.percentage);
+    }
+
+    if (totalPercentage != 100) {
+      throw new Error('Invalid percentages: does not add up to 100');
+    }
   
     for (const card of cards) {
       const parsedPercentage = parseFloat(card.percentage);
   
       if (isNaN(parsedPercentage)) {
-        throw new Error('Invalid percentages: must be numeric');
+        throw new Error('Invalid percentages: must be numeric and must not be empty');
       }
   
       totalScore = 0;
@@ -87,11 +96,11 @@ const SubGradeCalcScreen = () => {
   
 
         if (isNaN(parsedScore)) {
-          throw new Error('Invalid Scores: must be numeric');
+          throw new Error('Invalid Scores: must be numeric and must not be empty');
         }
 
         if (isNaN(parsedMaxScore)) {
-          throw new Error('Invalid Max Scores: must be numeric');
+          throw new Error('Invalid Max Scores: must be numeric and must not be empty');
         }
   
         totalScore += parsedScore;
@@ -278,14 +287,25 @@ const SubGradeCalcScreen = () => {
         onRequestClose={toggleOutputModal}
       >
         <TouchableWithoutFeedback onPress={toggleOutputModal}>
-          <View style={styles.modalContainer}>
+          <View style={styles.outputModalContainer}>
             <TouchableWithoutFeedback>
-              <View style={styles.modalContent}>
+              <View style={styles.outputModalContent}>
                 <Text>Calculated Grade: </Text>
                 <Text>{outputGrade}</Text>
 
                 <Text>Equivalent Grade: </Text>
                 <Text>{getGradeEquivalent()}</Text>
+
+                <View style={styles.extraCalculationContainer}>
+                  <View style={styles.tentativeGradeContainer}>
+                    <TextInput style={styles.tentativeGradeInput}/>
+                    <TextInput style={styles.tentativeWeightInput}/>
+                  </View>
+                  <View style={styles.fullGradeContainer}>
+                    <TextInput style={styles.fullGradeInput}/>
+                    <TextInput style={styles.fullWeightInput}/>
+                  </View>
+                </View>
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -422,18 +442,54 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center"
   },
-  modalContainer: {
+  outputModalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)', 
   },
-  modalContent: {
+  outputModalContent: {
     width: '80%',
-    backgroundColor: 'white',
+    backgroundColor: "#2c3e50",
     padding: 20,
     borderRadius: 10,
   },
+  extraCalculationContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 10,
+  },
+  tentativeGradeContainer: {
+    flexDirection: "column",
+  },
+  fullGradeContainer: {
+    flexDirection: "column",
+  },
+  tentativeGradeInput: {
+    height: 40,
+    width: 40,
+    backgroundColor: "white",
+    margin: 10,
+  },
+  fullGradeInput: {
+    height: 40,
+    width: 40,
+    backgroundColor: "white",
+    margin: 10,
+  },
+  tentativeWeightInput: {
+    height: 40,
+    width: 40,
+    backgroundColor: "white",
+    margin: 10,
+  },
+  fullWeightInput: {
+    height: 40,
+    width: 40,
+    backgroundColor: "white",
+    margin: 10,
+  }
 });
 
 export default SubGradeCalcScreen;
