@@ -3,24 +3,56 @@ import { View, Text, TextInput, StyleSheet, SafeAreaView, ScrollView, TouchableO
 
 
 const SubGradeCalcScreen = () => {
-  const [cards, setCards] = useState([]);
-  const [cardCounter, setcardCounter] = useState(1);
+  const [cards, setCards] = useState([
+    {
+      id: 1,
+      gradeComponentName: '',
+      percentage: '',
+      scores: [{ id: 1, score: '', maxScore: '' }],
+    },
+  ]);
+
+  const [cardCounter, setCardCounter] = useState(2); 
+  const [scoreCounter, setScoreCounter] = useState(2); 
+  const [outputValue, setOutputValue] = useState(0);
 
   const calculate = () => {
+
+    let totalScore = 0;
+    let totalMaxScore = 0;
+    const outputValuePerCard = [];
+
     for (const card of cards) {
-      console.log(`Card ID: ${card.id}`);
-      console.log('Scores:');
+      totalScore = 0;
+      totalMaxScore = 0;
       for (const score of card.scores) {
-        console.log(score);
+        totalScore += parseFloat(score.score); 
+        totalMaxScore += parseFloat(score.maxScore); 
       }
-      console.log('---');
+
+      let result = totalScore / totalMaxScore;
+      result = result * 50 + 50;
+      result = result * (parseFloat(card.percentage) / 100); 
+      outputValuePerCard.push(result);
     }
+
+    let finalResult = 0;
+    for (const value of outputValuePerCard) {
+      finalResult += value;
+    }
+
+    setOutputValue(finalResult);
   };
 
   const addCard = () => {
-    const newCard = { id: cardCounter, scores: [] };
+    const newCard = {
+      id: cardCounter,
+      gradeComponentName: '',
+      percentage: '',
+      scores: [{ id: 1, score: '', maxScore: '' }],
+    };
     setCards([...cards, newCard]);
-    setcardCounter(cardCounter + 1);
+    setCardCounter((prevCounter) => prevCounter + 1);
   };
 
   const removeCard = (id) => {
@@ -31,71 +63,133 @@ const SubGradeCalcScreen = () => {
   const addScore = (cardId) => {
     const updatedCards = cards.map((card) =>
       card.id === cardId
-        ? { ...card, scores: [...card.scores, { id: card.scores.length + 1 }] }
+        ? {
+            ...card,
+            scores: [
+              ...card.scores,
+              { id: scoreCounter, score: '', maxScore: '' },
+            ],
+          }
         : card
     );
     setCards(updatedCards);
+    setScoreCounter((prevCounter) => prevCounter + 1);
   };
-  
-  const removeScore = (cardId) => {
+
+  const removeScore = (cardId, scoreId) => {
     const updatedCards = cards.map((card) =>
       card.id === cardId
-        ? { ...card, scores: card.scores.slice(0, -1) } 
+        ? {
+            ...card,
+            scores: card.scores.filter((score) => score.id !== scoreId),
+          }
         : card
     );
     setCards(updatedCards);
   };
 
-  const renderScore = (cardId) => {
-    const card = cards.find((c) => c.id === cardId);
-    return card?.scores.map((score) => (
+  const updateCardInfo = (cardId, key, value) => {
+    const updatedCards = cards.map((card) =>
+      card.id === cardId ? { ...card, [key]: value } : card
+    );
+    setCards(updatedCards);
+  };
+
+  const updateScore = (cardId, scoreId, key, value) => {
+    const updatedCards = cards.map((card) =>
+      card.id === cardId
+        ? {
+            ...card,
+            scores: card.scores.map((score) =>
+              score.id === scoreId ? { ...score, [key]: value } : score
+            ),
+          }
+        : card
+    );
+    setCards(updatedCards);
+  };
+
+  const renderScore = (cardId, score) => {
+    return (
       <View key={score.id} style={styles.scoreContainer}>
         <View style={styles.signifierContainer}>
           <Text style={styles.signifierText}>Score</Text>
-          <TextInput style={styles.scoreInput}/>
+          <TextInput
+            style={styles.scoreInput}
+            value={score.score}
+            onChangeText={(text) => updateScore(cardId, score.id, 'score', text)}
+          />
         </View>
-        
+
         <View style={styles.signifierContainer}>
           <Text style={styles.signifierText}></Text>
           <Text style={styles.seperator}>/</Text>
         </View>
-        
+
         <View style={styles.signifierContainer}>
           <Text style={styles.signifierText}>Max Score</Text>
-          <TextInput style={styles.scoreInput}/>
+          <TextInput
+            style={styles.scoreInput}
+            value={score.maxScore}
+            onChangeText={(text) =>
+              updateScore(cardId, score.id, 'maxScore', text)
+            }
+          />
+        </View>
+        <View style={styles.signifierText}>
+          <TouchableOpacity
+            onPress={() => removeScore(cardId, score.id)}
+            style={styles.removeScore}
+          />
         </View>
       </View>
-    ));
+    );
   };
+
 
   const renderCards = () => {
     return cards.map((card) => (
       <View key={card.id} style={styles.card}>
         <View style={styles.cardHeader}>
-          <TextInput placeholder="grade component name" style={styles.titleInput}/>
-          <TextInput placeholder="percentage" style={styles.percentageInput}/>
-          <TouchableOpacity onPress={() => removeCard(card.id)} style={styles.removeCard}/>
+          <TextInput
+            placeholder="grade component name"
+            style={styles.titleInput}
+            value={card.gradeComponentName}
+            onChangeText={(text) =>
+              updateCardInfo(card.id, 'gradeComponentName', text)
+            }
+          />
+          <TextInput
+            placeholder="percentage"
+            style={styles.percentageInput}
+            value={card.percentage}
+            onChangeText={(text) => updateCardInfo(card.id, 'percentage', text)}
+          />
+          <TouchableOpacity
+            onPress={() => removeCard(card.id)}
+            style={styles.removeCard}
+          />
         </View>
         <View style={styles.cardBody}>
-
           <View style={styles.scoreControl}>
-              <TouchableOpacity onPress={() => addScore(card.id)} style={styles.addScore} />
-              <TouchableOpacity onPress={() => removeScore(card.id)} style={styles.removeScore}/>
+            <TouchableOpacity
+              onPress={() => addScore(card.id)}
+              style={styles.addScore}
+            />
           </View>
-
-            <View style={{flexDirection: "column"}}>
-              {renderScore(card.id)}
-            </View>
-            
+          <View style={{ flexDirection: 'column' }}>
+            {card.scores.map((score) => renderScore(card.id, score))}
           </View>
+        </View>
       </View>
     ));
   };
 
   return (
     <SafeAreaView style={styles.container}>
+      <Text style={styles.outputValueText}>{outputValue}</Text>
       <TouchableOpacity style={styles.addCard} onPress={addCard} />
-      <TouchableOpacity style={styles.calculate} onPress={calculate}/>
+      <TouchableOpacity style={styles.calculate} onPress={calculate} />
       <ScrollView>
         <SafeAreaView>{renderCards()}</SafeAreaView>
       </ScrollView>
@@ -121,7 +215,7 @@ const styles = StyleSheet.create({
   },
   titleInput: {
     flex: 1,
-    height: 40,
+    height: 50,
     backgroundColor: 'white',
     borderRadius: 5,
     marginRight: 10,
@@ -130,7 +224,7 @@ const styles = StyleSheet.create({
   },
   percentageInput: {
     width: 100,
-    height: 40,
+    height: 50,
     backgroundColor: 'white',
     borderRadius: 5,
     paddingLeft: 10,
@@ -187,7 +281,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "flex-end",
+    marginBottom: 10,
   },
   addScore: {
     backgroundColor: "yellow",
@@ -202,6 +297,7 @@ const styles = StyleSheet.create({
     width: 40,
     margin: 10,
     borderRadius: 10,
+    marginVertical: 20,
   },
   calculate: {
     alignSelf: 'center',
@@ -212,6 +308,10 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  outputValueText: {
+    fontSize: 30,
+    color: "white"
   }
 });
 
