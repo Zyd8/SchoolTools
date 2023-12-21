@@ -1,23 +1,29 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
-
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 
 const SubGradeCalcScreen = () => {
   const [cards, setCards] = useState([
     {
       id: 1,
-      gradeComponentName: '',
-      percentage: '',
-      scores: [{ id: 1, score: '', maxScore: '' }],
+      gradeComponentName: "",
+      percentage: "",
+      scores: [{ id: 1, score: "", maxScore: "" }],
     },
   ]);
 
-  const [cardCounter, setCardCounter] = useState(2); 
-  const [scoreCounter, setScoreCounter] = useState(2); 
+  const [cardCounter, setCardCounter] = useState(2);
+  const [scoreCounter, setScoreCounter] = useState(2);
   const [outputValue, setOutputValue] = useState(0);
 
   const calculate = () => {
-
     let totalScore = 0;
     let totalMaxScore = 0;
     const outputValuePerCard = [];
@@ -26,13 +32,13 @@ const SubGradeCalcScreen = () => {
       totalScore = 0;
       totalMaxScore = 0;
       for (const score of card.scores) {
-        totalScore += parseFloat(score.score); 
-        totalMaxScore += parseFloat(score.maxScore); 
+        totalScore += parseFloat(score.score);
+        totalMaxScore += parseFloat(score.maxScore);
       }
 
       let result = totalScore / totalMaxScore;
       result = result * 50 + 50;
-      result = result * (parseFloat(card.percentage) / 100); 
+      result = result * (parseFloat(card.percentage) / 100);
       outputValuePerCard.push(result);
     }
 
@@ -47,9 +53,9 @@ const SubGradeCalcScreen = () => {
   const addCard = () => {
     const newCard = {
       id: cardCounter,
-      gradeComponentName: '',
-      percentage: '',
-      scores: [{ id: 1, score: '', maxScore: '' }],
+      gradeComponentName: "",
+      percentage: "",
+      scores: [{ id: 1, score: "", maxScore: "" }],
     };
     setCards([...cards, newCard]);
     setCardCounter((prevCounter) => prevCounter + 1);
@@ -67,7 +73,7 @@ const SubGradeCalcScreen = () => {
             ...card,
             scores: [
               ...card.scores,
-              { id: scoreCounter, score: '', maxScore: '' },
+              { id: scoreCounter, score: "", maxScore: "" },
             ],
           }
         : card
@@ -117,7 +123,9 @@ const SubGradeCalcScreen = () => {
           <TextInput
             style={styles.scoreInput}
             value={score.score}
-            onChangeText={(text) => updateScore(cardId, score.id, 'score', text)}
+            onChangeText={(text) =>
+              updateScore(cardId, score.id, "score", text)
+            }
           />
         </View>
 
@@ -132,7 +140,7 @@ const SubGradeCalcScreen = () => {
             style={styles.scoreInput}
             value={score.maxScore}
             onChangeText={(text) =>
-              updateScore(cardId, score.id, 'maxScore', text)
+              updateScore(cardId, score.id, "maxScore", text)
             }
           />
         </View>
@@ -146,7 +154,6 @@ const SubGradeCalcScreen = () => {
     );
   };
 
-
   const renderCards = () => {
     return cards.map((card) => (
       <View key={card.id} style={styles.card}>
@@ -156,14 +163,14 @@ const SubGradeCalcScreen = () => {
             style={styles.titleInput}
             value={card.gradeComponentName}
             onChangeText={(text) =>
-              updateCardInfo(card.id, 'gradeComponentName', text)
+              updateCardInfo(card.id, "gradeComponentName", text)
             }
           />
           <TextInput
             placeholder="percentage"
             style={styles.percentageInput}
             value={card.percentage}
-            onChangeText={(text) => updateCardInfo(card.id, 'percentage', text)}
+            onChangeText={(text) => updateCardInfo(card.id, "percentage", text)}
           />
           <TouchableOpacity
             onPress={() => removeCard(card.id)}
@@ -177,7 +184,7 @@ const SubGradeCalcScreen = () => {
               style={styles.addScore}
             />
           </View>
-          <View style={{ flexDirection: 'column' }}>
+          <View style={{ flexDirection: "column" }}>
             {card.scores.map((score) => renderScore(card.id, score))}
           </View>
         </View>
@@ -200,23 +207,23 @@ const SubGradeCalcScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: "black",
     padding: 10,
   },
   card: {
     marginVertical: 10,
-    backgroundColor: '#2c3e50',
+    backgroundColor: "#2c3e50",
     borderRadius: 10,
   },
   cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 10,
   },
   titleInput: {
     flex: 1,
     height: 50,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 5,
     marginRight: 10,
     paddingLeft: 10,
@@ -225,57 +232,57 @@ const styles = StyleSheet.create({
   percentageInput: {
     width: 100,
     height: 50,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 5,
     paddingLeft: 10,
-    margin: 15
+    margin: 15,
   },
   removeCard: {
     width: 30,
     height: 30,
-    backgroundColor: 'red',
+    backgroundColor: "red",
     borderRadius: 5,
   },
   addCard: {
-    alignSelf: 'center',
+    alignSelf: "center",
     marginVertical: 10,
     width: 50,
     height: 50,
-    backgroundColor: 'green',
+    backgroundColor: "green",
     borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   cardBody: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   scoreContainer: {
     flex: 2,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 20,
-    marginRight: 15
+    marginRight: 15,
   },
   scoreInput: {
     flex: 1,
     height: 40,
     width: 60,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 5,
-    textAlign: 'center',
+    textAlign: "center",
   },
   seperator: {
-    color: 'white',
+    color: "white",
     fontSize: 30,
     marginHorizontal: 5,
     marginHorizontal: 10,
   },
   signifierText: {
-    color: 'white',
+    color: "white",
     marginVertical: 5,
     textAlign: "center",
-    fontSize: 12
+    fontSize: 12,
   },
   scoreControl: {
     flex: 1,
@@ -300,19 +307,19 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   calculate: {
-    alignSelf: 'center',
+    alignSelf: "center",
     marginVertical: 10,
     width: 50,
     height: 50,
-    backgroundColor: 'green',
+    backgroundColor: "green",
     borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   outputValueText: {
     fontSize: 30,
-    color: "white"
-  }
+    color: "white",
+  },
 });
 
 export default SubGradeCalcScreen;
