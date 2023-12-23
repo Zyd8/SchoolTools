@@ -23,103 +23,117 @@ const SubGradeCalcScreen = () => {
 
   const [cardCounter, setCardCounter] = useState(2);
   const [scoreCounter, setScoreCounter] = useState(2);
-  const [outputGrade, setOutputGrade] = useState('');
+  const [outputGrade, setOutputGrade] = useState("");
+  const [errorOutput, setErrorOutput] = useState("");
   const [isOutputVisible, setisOutputVisible] = useState(false);
+  const [isErrorOutputVisible, setErrorOutputVisible] = useState(false);
 
   const getGradeEquivalent = () => {
     let equivalentGrade;
     if (outputGrade >= 98 && outputGrade <= 100) {
       equivalentGrade = "1.00";
-    }
-    else if (outputGrade >= 95 && outputGrade <= 97) {
+    } else if (outputGrade >= 95 && outputGrade <= 97) {
       equivalentGrade = "1.25";
-    }
-    else if (outputGrade >= 92 && outputGrade <= 94) {
+    } else if (outputGrade >= 92 && outputGrade <= 94) {
       equivalentGrade = "1.50";
-    }
-    else if (outputGrade >= 89 && outputGrade <= 91) {
+    } else if (outputGrade >= 89 && outputGrade <= 91) {
       equivalentGrade = "1.75";
-    }
-    else if (outputGrade >= 86 && outputGrade <= 88) {
+    } else if (outputGrade >= 86 && outputGrade <= 88) {
       equivalentGrade = "2.00";
-    }
-    else if (outputGrade >= 83 && outputGrade <= 85) {
+    } else if (outputGrade >= 83 && outputGrade <= 85) {
       equivalentGrade = "2.25";
-    }
-    else if (outputGrade >= 80 && outputGrade <= 82) {
+    } else if (outputGrade >= 80 && outputGrade <= 82) {
       equivalentGrade = "2.50";
-    }
-    else if (outputGrade >= 77 && outputGrade <= 79) {
+    } else if (outputGrade >= 77 && outputGrade <= 79) {
       equivalentGrade = "2.75";
-    }
-    else if (outputGrade >= 75 && outputGrade <= 76) {
+    } else if (outputGrade >= 75 && outputGrade <= 76) {
       equivalentGrade = "3.00";
-    }
-    else {
-      equivalentGrade = "4.00 or 5.00"
+    } else {
+      equivalentGrade = "4.00 or 5.00";
     }
     return equivalentGrade;
-  }
-  
+  };
+
+  const toggleErrorOutputModal = () => {
+    setErrorOutputVisible(!isErrorOutputVisible);
+  };
 
   const toggleOutputModal = () => {
     setisOutputVisible(!isOutputVisible);
-  }
+  };
 
   const calculate = () => {
     let totalScore = 0;
     let totalMaxScore = 0;
     const outputGradePerCard = [];
 
-    let totalPercentage = 0;
-    for (const card of cards) {
-      totalPercentage += parseFloat(card.percentage);
-    }
-
-    if (totalPercentage != 100) {
-      throw new Error('Invalid percentages: does not add up to 100');
-    }
-  
     for (const card of cards) {
       const parsedPercentage = parseFloat(card.percentage);
-  
       if (isNaN(parsedPercentage)) {
-        throw new Error('Invalid percentages: must be numeric and must not be empty');
+        setErrorOutput(
+          "Invalid percentages: must be numeric and must not be empty"
+        );
+        toggleErrorOutputModal();
+        throw new Error(
+          "Invalid percentages: must be numeric and must not be empty"
+        );
       }
-  
+
+      let totalPercentage = 0;
+      for (const card of cards) {
+        totalPercentage += parseFloat(card.percentage);
+      }
+      if (totalPercentage != 100) {
+        console.log(totalPercentage);
+        setErrorOutput("Invalid percentages: must add up to 100");
+        toggleErrorOutputModal();
+        throw new Error("Invalid percentages: must add up to 100");
+      }
+
       totalScore = 0;
       totalMaxScore = 0;
-  
       for (const score of card.scores) {
         const parsedScore = parseFloat(score.score);
         const parsedMaxScore = parseFloat(score.maxScore);
-  
 
         if (isNaN(parsedScore)) {
-          throw new Error('Invalid Scores: must be numeric and must not be empty');
+          setErrorOutput(
+            "Invalid Scores: must be numeric and must not be empty"
+          );
+          toggleErrorOutputModal();
+          throw new Error(
+            "Invalid Scores: must be numeric and must not be empty"
+          );
         }
 
         if (isNaN(parsedMaxScore)) {
-          throw new Error('Invalid Max Scores: must be numeric and must not be empty');
+          setErrorOutput(
+            "Invalid Max Scores: must be numeric and must not be empty"
+          );
+          toggleErrorOutputModal();
+          throw new Error(
+            "Invalid Max Scores: must be numeric and must not be empty"
+          );
         }
-  
+
         totalScore += parsedScore;
         totalMaxScore += parsedMaxScore;
       }
-  
-      let result = ((totalScore / totalMaxScore) * 50 + 50) * (parsedPercentage / 100);
+
+      let result =
+        ((totalScore / totalMaxScore) * 50 + 50) * (parsedPercentage / 100);
       outputGradePerCard.push(result);
     }
-  
+
     let finalResult = 0;
     for (const value of outputGradePerCard) {
       finalResult += value;
     }
-  
+
     setOutputGrade(finalResult);
     toggleOutputModal();
   };
-  
+
   const addCard = () => {
     const newCard = {
       id: cardCounter,
@@ -194,7 +208,7 @@ const SubGradeCalcScreen = () => {
             style={styles.scoreInput}
             value={score.score}
             onChangeText={(text) => {
-              const numericValue = text.replace(/[^0-9]/g, '');
+              const numericValue = text.replace(/[^0-9]/g, "");
               updateScore(cardId, score.id, "score", numericValue);
             }}
             keyboardType="numeric"
@@ -212,7 +226,7 @@ const SubGradeCalcScreen = () => {
             style={styles.scoreInput}
             value={score.maxScore}
             onChangeText={(text) => {
-              const numericValue = text.replace(/[^0-9]/g, '');
+              const numericValue = text.replace(/[^0-9]/g, "");
               updateScore(cardId, score.id, "maxScore", numericValue);
             }}
             keyboardType="numeric"
@@ -245,7 +259,7 @@ const SubGradeCalcScreen = () => {
             style={styles.percentageInput}
             value={card.percentage}
             onChangeText={(text) => {
-              const numericValue = text.replace(/[^0-9]/g, '');
+              const numericValue = text.replace(/[^0-9]/g, "");
               updateCardInfo(card.id, "percentage", numericValue);
             }}
             keyboardType="numeric"
@@ -298,14 +312,32 @@ const SubGradeCalcScreen = () => {
 
                 <View style={styles.extraCalculationContainer}>
                   <View style={styles.tentativeGradeContainer}>
-                    <TextInput style={styles.tentativeGradeInput}/>
-                    <TextInput style={styles.tentativeWeightInput}/>
+                    <TextInput style={styles.tentativeGradeInput} />
+                    <TextInput style={styles.tentativeWeightInput} />
                   </View>
                   <View style={styles.fullGradeContainer}>
-                    <TextInput style={styles.fullGradeInput}/>
-                    <TextInput style={styles.fullWeightInput}/>
+                    <TextInput style={styles.fullGradeInput} />
+                    <TextInput style={styles.fullWeightInput} />
                   </View>
                 </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={isErrorOutputVisible}
+        onRequestClose={toggleErrorOutputModal}
+      >
+        <TouchableWithoutFeedback onPress={toggleErrorOutputModal}>
+          <View style={styles.errorOutputModalContainer}>
+            <TouchableWithoutFeedback>
+              <View style={styles.errorOutputModalContent}>
+                <Text>Error Message Says: </Text>
+                <Text>{errorOutput}</Text>
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -435,21 +467,21 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     textAlign: "center",
     alignItems: "center",
-    textAlignVertical: "center"
+    textAlignVertical: "center",
   },
   cardControl: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
   },
   outputModalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   outputModalContent: {
-    width: '80%',
+    width: "80%",
     backgroundColor: "#2c3e50",
     padding: 20,
     borderRadius: 10,
@@ -489,7 +521,20 @@ const styles = StyleSheet.create({
     width: 40,
     backgroundColor: "white",
     margin: 10,
-  }
+  },
+  errorOutputModalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  errorOutputModalContent: {
+    width: "80%",
+    backgroundColor: "#2c3e50",
+    padding: 20,
+    borderRadius: 10,
+    color: "white"
+  },
 });
 
 export default SubGradeCalcScreen;
