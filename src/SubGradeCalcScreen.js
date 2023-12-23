@@ -84,7 +84,6 @@ const SubGradeCalcScreen = () => {
         totalPercentage += parseFloat(card.percentage);
       }
       if (totalPercentage != 100) {
-        console.log(totalPercentage);
         setErrorOutput("Invalid percentages: must add up to 100");
         toggleErrorOutputModal();
         throw new Error("Invalid percentages: must add up to 100");
@@ -304,22 +303,11 @@ const SubGradeCalcScreen = () => {
           <View style={styles.outputModalContainer}>
             <TouchableWithoutFeedback>
               <View style={styles.outputModalContent}>
-                <Text>Calculated Grade: </Text>
-                <Text>{outputGrade}</Text>
+                <Text style={styles.modalHeaderText}>Calculated Grade: </Text>
+                <Text style={styles.modalContentText}>{outputGrade}</Text>
 
-                <Text>Equivalent Grade: </Text>
-                <Text>{getGradeEquivalent()}</Text>
-
-                <View style={styles.extraCalculationContainer}>
-                  <View style={styles.tentativeGradeContainer}>
-                    <TextInput style={styles.tentativeGradeInput} />
-                    <TextInput style={styles.tentativeWeightInput} />
-                  </View>
-                  <View style={styles.fullGradeContainer}>
-                    <TextInput style={styles.fullGradeInput} />
-                    <TextInput style={styles.fullWeightInput} />
-                  </View>
-                </View>
+                <Text style={styles.modalHeaderText}>Equivalent Grade: </Text>
+                <Text style={styles.modalContentText}>{getGradeEquivalent()}</Text>
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -336,8 +324,8 @@ const SubGradeCalcScreen = () => {
           <View style={styles.errorOutputModalContainer}>
             <TouchableWithoutFeedback>
               <View style={styles.errorOutputModalContent}>
-                <Text>Error Message Says: </Text>
-                <Text>{errorOutput}</Text>
+                <Text style={styles.modalHeaderText}>Error Message Says: </Text>
+                <Text style={styles.modalContentText}>{errorOutput}</Text>
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -486,42 +474,6 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
   },
-  extraCalculationContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    margin: 10,
-  },
-  tentativeGradeContainer: {
-    flexDirection: "column",
-  },
-  fullGradeContainer: {
-    flexDirection: "column",
-  },
-  tentativeGradeInput: {
-    height: 40,
-    width: 40,
-    backgroundColor: "white",
-    margin: 10,
-  },
-  fullGradeInput: {
-    height: 40,
-    width: 40,
-    backgroundColor: "white",
-    margin: 10,
-  },
-  tentativeWeightInput: {
-    height: 40,
-    width: 40,
-    backgroundColor: "white",
-    margin: 10,
-  },
-  fullWeightInput: {
-    height: 40,
-    width: 40,
-    backgroundColor: "white",
-    margin: 10,
-  },
   errorOutputModalContainer: {
     flex: 1,
     justifyContent: "center",
@@ -534,6 +486,24 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     color: "white"
+  },
+  modalHeaderText: {
+    color: "white",
+    fontSize: 26,
+    backgroundColor: "black",
+    padding: 5,
+    paddingLeft: 10,
+    borderRadius: 10,
+    margin: 5,
+  },
+  modalContentText: {
+    color: "white",
+    fontSize: 16,
+    backgroundColor: "black",
+    padding: 5,
+    paddingLeft: 10,
+    borderRadius: 10,
+    margin: 5,
   },
 });
 
