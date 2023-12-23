@@ -263,6 +263,7 @@ const SubGradeCalcScreen = () => {
             }}
             keyboardType="numeric"
           />
+          <Text style={styles.percentSignifier}>%</Text>
           <TouchableOpacity
             onPress={() => removeCard(card.id)}
             style={styles.removeCard}
@@ -366,7 +367,19 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 5,
     paddingLeft: 10,
-    margin: 15,
+    marginBottom: 15,
+    marginTop: 15,
+    marginLeft: 15,
+    
+    },
+  percentSignifier: {
+    fontSize: 26,
+    color: "white",
+    textAlignVertical: "center",
+    marginBottom: 15,
+    marginTop: 15,
+    marginRight: 15,
+    marginLeft: 5
   },
   removeCard: {
     width: 30,
