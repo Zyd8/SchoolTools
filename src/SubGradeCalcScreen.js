@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   View,
+  Image,
   Text,
   TextInput,
   StyleSheet,
@@ -235,7 +236,12 @@ const SubGradeCalcScreen = () => {
           <TouchableOpacity
             onPress={() => removeScore(cardId, score.id)}
             style={styles.removeScore}
-          />
+          >
+            <Image
+              style={{ width: 20, height: 20 }}
+              source={require('.././assets/minus.png')} 
+            />
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -267,14 +273,24 @@ const SubGradeCalcScreen = () => {
           <TouchableOpacity
             onPress={() => removeCard(card.id)}
             style={styles.removeCard}
-          />
+          >
+            <Image
+              style={{ width: 20, height: 20 }}
+              source={require('.././assets/x.png')} 
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.cardBody}>
           <View style={styles.scoreControl}>
             <TouchableOpacity
               onPress={() => addScore(card.id)}
               style={styles.addScore}
-            />
+            >
+              <Image
+                style={{ width: 20, height: 20 }}
+                source={require('.././assets/plus.png')} 
+              />
+            </TouchableOpacity>
           </View>
           <View style={{ flexDirection: "column" }}>
             {card.scores.map((score) => renderScore(card.id, score))}
@@ -287,9 +303,19 @@ const SubGradeCalcScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.cardControl}>
-        <TouchableOpacity style={styles.addCard} onPress={addCard} />
+        <TouchableOpacity style={styles.addCard} onPress={addCard}>
+          <Image
+            style={{ width: 20, height: 20 }}
+            source={require('.././assets/plus.png')} 
+          />
+        </TouchableOpacity>
         <Text style={styles.outputGradeText}>{outputGrade}</Text>
-        <TouchableOpacity style={styles.calculateButton} onPress={calculate} />
+        <TouchableOpacity style={styles.calculateButton} onPress={calculate}>
+          <Image
+            style={{ width: 20, height: 20 }}
+            source={require('.././assets/check.png')} 
+          />
+        </TouchableOpacity>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <SafeAreaView>{renderCards()}</SafeAreaView>
@@ -339,13 +365,21 @@ const SubGradeCalcScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "black",
+    backgroundColor: "#1a1a1a", 
     padding: 10,
   },
   card: {
     marginVertical: 10,
-    backgroundColor: "#2c3e50",
-    borderRadius: 10,
+    backgroundColor: "#262626", 
+    borderRadius: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   cardHeader: {
     flexDirection: "row",
@@ -355,26 +389,27 @@ const styles = StyleSheet.create({
   titleInput: {
     flex: 1,
     height: 50,
-    backgroundColor: "white",
+    backgroundColor: "#383838", 
     borderRadius: 5,
     marginRight: 10,
     paddingLeft: 10,
     margin: 15,
+    color: "#d9d9d9",
   },
   percentageInput: {
     width: 100,
     height: 50,
-    backgroundColor: "white",
+    backgroundColor: "#383838", 
     borderRadius: 5,
     paddingLeft: 10,
     marginBottom: 15,
     marginTop: 15,
     marginLeft: 15,
-    
+    color: "#d9d9d9",
     },
   percentSignifier: {
     fontSize: 26,
-    color: "white",
+    color: "#d9d9d9", 
     textAlignVertical: "center",
     marginBottom: 15,
     marginTop: 15,
@@ -384,15 +419,17 @@ const styles = StyleSheet.create({
   removeCard: {
     width: 30,
     height: 30,
-    backgroundColor: "red",
+    backgroundColor: "#e74c3c", 
     borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center"
   },
   addCard: {
     alignSelf: "center",
     marginVertical: 10,
     width: 80,
     height: 50,
-    backgroundColor: "green",
+    backgroundColor: "#27ae60", 
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
@@ -412,18 +449,19 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     width: 60,
-    backgroundColor: "white",
+    backgroundColor: "#383838", 
     borderRadius: 5,
     textAlign: "center",
+    color: "#d9d9d9",
   },
   seperator: {
-    color: "white",
+    color: "#d9d9d9", 
     fontSize: 30,
     marginHorizontal: 5,
     marginHorizontal: 10,
   },
   signifierText: {
-    color: "white",
+    color: "#d9d9d9", 
     marginVertical: 5,
     textAlign: "center",
     fontSize: 12,
@@ -436,44 +474,50 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   addScore: {
-    backgroundColor: "yellow",
+    backgroundColor: "#f39c12", 
     height: 40,
     width: 40,
     margin: 10,
     borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center"
   },
   removeScore: {
-    backgroundColor: "orange",
+    backgroundColor: "#e67e22",
     height: 40,
     width: 40,
     margin: 10,
     borderRadius: 10,
     marginVertical: 20,
+    justifyContent: "center",
+    alignItems: "center"
   },
   calculateButton: {
     alignSelf: "center",
     marginVertical: 10,
     width: 50,
     height: 50,
-    backgroundColor: "green",
+    backgroundColor: "#3498db", 
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
   },
   outputGradeText: {
     marginVertical: 10,
-    backgroundColor: "white",
+    backgroundColor: "#383838", 
     height: 40,
     width: 160,
     borderRadius: 10,
     textAlign: "center",
     alignItems: "center",
     textAlignVertical: "center",
+    color: "#d9d9d9",
   },
   cardControl: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 10,
   },
   outputModalContainer: {
     flex: 1,
@@ -483,7 +527,7 @@ const styles = StyleSheet.create({
   },
   outputModalContent: {
     width: "80%",
-    backgroundColor: "#2c3e50",
+    backgroundColor: "#262626",
     padding: 20,
     borderRadius: 10,
   },
@@ -495,24 +539,24 @@ const styles = StyleSheet.create({
   },
   errorOutputModalContent: {
     width: "80%",
-    backgroundColor: "#2c3e50",
+    backgroundColor: "#262626",
     padding: 20,
     borderRadius: 10,
-    color: "white"
+    color: "#d9d9d9", 
   },
   modalHeaderText: {
-    color: "white",
-    fontSize: 26,
-    backgroundColor: "black",
+    color: "#d9d9d9", 
+    fontSize: 22,
+    backgroundColor: "#333333", 
     padding: 5,
     paddingLeft: 10,
     borderRadius: 10,
     margin: 5,
   },
   modalContentText: {
-    color: "white",
-    fontSize: 16,
-    backgroundColor: "black",
+    color: "#d9d9d9", 
+    fontSize: 14,
+    backgroundColor: "#333333", 
     padding: 5,
     paddingLeft: 10,
     borderRadius: 10,

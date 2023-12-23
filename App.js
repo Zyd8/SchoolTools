@@ -11,17 +11,24 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Subject Grade Calculator">
-        <Stack.Screen
-          // For expanding purposes
-          name="ToolSelectionScreen"
-          component={SelectGradeCalcScreen}
-        />
-        <Stack.Screen
-          name="Subject Grade Calculator"
-          component={SubGradeCalcScreen}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator
+      initialRouteName="Subject Grade Calculator"
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "#333333", 
+        },
+        headerTintColor: "#d9d9d9", 
+      }}
+    >
+      <Stack.Screen
+        name="ToolSelectionScreen"
+        component={SelectGradeCalcScreen}
+      />
+      <Stack.Screen
+        name="Subject Grade Calculator"
+        component={SubGradeCalcScreen}
+      />
+    </Stack.Navigator>
+  </NavigationContainer>
   );
 }
